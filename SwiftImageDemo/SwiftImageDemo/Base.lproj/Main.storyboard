@@ -55,10 +55,10 @@
             </objects>
             <point key="canvasLocation" x="1052" y="429"/>
         </scene>
-        <!--View Controller-->
+        <!--Image Table View Controller-->
         <scene sceneID="oVa-EN-1IR">
             <objects>
-                <viewController id="9OJ-tl-PKq" sceneMemberID="viewController">
+                <viewController id="9OJ-tl-PKq" customClass="ImageTableViewController" customModule="SwiftImageDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Bu9-gL-pY1"/>
                         <viewControllerLayoutGuide type="bottom" id="ewv-Yr-dWF"/>
@@ -90,7 +90,7 @@
                                                         <constraint firstAttribute="height" constant="21" id="jLX-W9-HKQ"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -119,6 +119,9 @@
                             <constraint firstItem="cOW-sD-oBW" firstAttribute="top" secondItem="ton-E3-MuE" secondAttribute="top" id="L0x-Hn-B4B"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="cOW-sD-oBW" id="x1B-hf-s1S"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LaP-X8-RIB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
