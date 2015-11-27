@@ -31,7 +31,7 @@ public class SwiftImageDownloadManager: NSObject {
     
     public func cancel(operation:SwiftImageDownloadOperation){
         operation.cancel();
-        self.removeOperationForKey(operation.key!)
+        self.removeOperation(operation)
     }
     
     public func fetchOperationForKey(key: String) -> SwiftImageDownloadOperation? {
@@ -42,17 +42,15 @@ public class SwiftImageDownloadManager: NSObject {
         return downloadOperation
     }
     
-    public func removeOperationForKey(key: String) {
-        dispatch_barrier_async(self.ioQueue, { () -> Void in
-            self.imageDownloadOperationQueue.removeValueForKey(key)
-            return
-        })
+    public func removeOperation(operation:SwiftImageDownloadOperation){
+        dispatch_async(self.ioQueue) { () -> Void in
+            self.imageDownloadOperationQueue.removeValueForKey(operation.key!)
+        }
     }
     
     public func addOperationForKey(key: String, operation:SwiftImageDownloadOperation) {
         dispatch_barrier_async(self.ioQueue, { () -> Void in
             self.imageDownloadOperationQueue[key] = operation
-            return
         })
     }
     

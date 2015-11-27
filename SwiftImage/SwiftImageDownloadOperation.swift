@@ -83,7 +83,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                                 for completionHandler in self.completionHandlers {
                                     completionHandler(image:image, data:self.responseData, error:nil, finished:true)
                                 }
-                                SwiftImageDownloadManager.sharedInstance.removeOperationForKey(url.absoluteString)
+                                SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                             })
                         }
                     }
@@ -113,13 +113,13 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
     
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
-        if let URL = task.originalRequest!.URL where self.isCancelled == false {
+        if self.isCancelled == false {
             if let error = error {
                 dispatch_async(self.ioQueue, { () -> Void in
                     for completionHandler in self.completionHandlers {
                         completionHandler(image:nil, data:nil, error:error, finished:true)
                     }
-                    SwiftImageDownloadManager.sharedInstance.removeOperationForKey(URL.absoluteString)
+                    SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                 })
             } else {
                 if let image = UIImage(data: self.responseData) {
@@ -129,7 +129,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                             for completionHandler in self.completionHandlers {
                                 completionHandler(image:imageResult, data:self.responseData, error:nil, finished:true)
                             }
-                            SwiftImageDownloadManager.sharedInstance.removeOperationForKey(URL.absoluteString)
+                            SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                         })
                     })
                     
@@ -147,7 +147,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                         for completionHandler in self.completionHandlers {
                             completionHandler(image: nil, data: nil, error: error, finished:true)
                         }
-                        SwiftImageDownloadManager.sharedInstance.removeOperationForKey(URL.absoluteString)
+                        SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                     })
                 }
             }
