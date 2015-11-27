@@ -83,6 +83,8 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                                 for completionHandler in self.completionHandlers {
                                     completionHandler(image:image, data:self.responseData, error:nil, finished:true)
                                 }
+                                self.progressHandlers.removeAll()
+                                self.completionHandlers.removeAll()
                                 SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                             })
                         }
@@ -104,7 +106,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
         
             responseData.appendData(data)
             
-            dispatch_async(self.ioQueue, { () -> Void in
+            dispatch_async(self.ioQueue, { [unowned self]() -> Void in
                 for progressHandler in self.progressHandlers {
                     progressHandler(receivedSize: Int64(self.responseData.length), expectedSize: dataTask.response!.expectedContentLength)
                 }
@@ -112,23 +114,29 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
     }
     
     public func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-        
         if self.isCancelled == false {
             if let error = error {
-                dispatch_async(self.ioQueue, { () -> Void in
+                dispatch_async(self.ioQueue, { [unowned self]() -> Void in
                     for completionHandler in self.completionHandlers {
                         completionHandler(image:nil, data:nil, error:error, finished:true)
                     }
+                    self.progressHandlers.removeAll()
+                    self.completionHandlers.removeAll()
+                    self.session?.finishTasksAndInvalidate()
                     SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                 })
             } else {
+                let key = String(self.key)
                 if let image = UIImage(data: self.responseData) {
-                    SwiftImageCache.sharedInstance.storeImage(image, key: self.key!, imageData: nil, cachePolicy:self.options.cachePolicy, completionHandler: {()-> Void in
+                    SwiftImageCache.sharedInstance.storeImage(image, key: key, imageData: nil, cachePolicy:self.options.cachePolicy, completionHandler: { [unowned self]()-> Void in
                         let imageResult = self.shouldDecode ? SwiftImageUtils.decodImage(image, scale: self.options.scale) :image
-                        dispatch_async(self.ioQueue, { () -> Void in
+                        dispatch_async(self.ioQueue, { [unowned self]() -> Void in
                             for completionHandler in self.completionHandlers {
                                 completionHandler(image:imageResult, data:self.responseData, error:nil, finished:true)
                             }
+                            self.progressHandlers.removeAll()
+                            self.completionHandlers.removeAll()
+                            self.session?.finishTasksAndInvalidate()
                             SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                         })
                     })
@@ -142,11 +150,14 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                         errorCode = ImageDownloadOperationErrorCode.NotModified.rawValue;
                     }
                     
-                    dispatch_async(self.ioQueue, { () -> Void in
+                    dispatch_async(self.ioQueue, { [unowned self]() -> Void in
                         let error =  NSError(domain: self.ImageDownloadOperationErrorDomain, code: errorCode, userInfo: nil)
                         for completionHandler in self.completionHandlers {
                             completionHandler(image: nil, data: nil, error: error, finished:true)
                         }
+                        self.progressHandlers.removeAll()
+                        self.completionHandlers.removeAll()
+                        self.session?.finishTasksAndInvalidate()
                         SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                     })
                 }

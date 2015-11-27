@@ -16,7 +16,7 @@ public enum CacheType {
 public class SwiftImageCache: NSObject {
     private static let ioQueueName = "com.jiecao.SwiftImage.ImageCache.ioQueue"
     private static let processQueueName = "com.jiecao.SwiftImage.ImageCache.processQueue"
-    private static let cacheName = "com.jiecao.SwiftImage.ImageCache.CacheName"
+    private static let cacheName = "com.jiecao.SwiftImage.ImageCache.CachePath"
     static let sharedInstance = SwiftImageCache()
     
     var maxCacheAge:NSTimeInterval = 60 * 60 * 24 * 7
@@ -46,7 +46,7 @@ public class SwiftImageCache: NSObject {
     }
     
     public func clearDiskCache(){
-        dispatch_async(ioQueue, { () -> Void in
+        dispatch_barrier_async(ioQueue, { () -> Void in
             do {
                 try self.fileManager.removeItemAtPath(self.filesFolder.path!)
             } catch _ {
@@ -76,7 +76,7 @@ public class SwiftImageCache: NSObject {
     
     func cleanExpiredDiskCacheWithCompletionHander(completionHandler: (()->())?) {
         // Do things in cocurrent io queue
-        dispatch_async(ioQueue, { () -> Void in
+        dispatch_barrier_async(ioQueue, { () -> Void in
             let diskCacheURL = NSURL(fileURLWithPath: self.filesFolder.path!)
             
             let resourceKeys = [NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey]

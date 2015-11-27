@@ -43,8 +43,14 @@ public class SwiftImageDownloadManager: NSObject {
     }
     
     public func removeOperation(operation:SwiftImageDownloadOperation){
-        dispatch_async(self.ioQueue) { () -> Void in
+        dispatch_barrier_async(self.ioQueue) { () -> Void in
             self.imageDownloadOperationQueue.removeValueForKey(operation.key!)
+        }
+    }
+    
+    public func addOperation(operation:SwiftImageDownloadOperation){
+        dispatch_barrier_async(self.ioQueue) { () -> Void in
+            self.imageDownloadOperationQueue[operation.key!] = operation
         }
     }
     
