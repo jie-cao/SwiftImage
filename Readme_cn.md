@@ -34,7 +34,8 @@ SwiftImage是一个开源库，可以从[这里](https://github.com/jie-cao/Swif
 ----------
 
 ### 使用ImageView Extension
-导入的SwiftImage库后，UIImageView提供了多个从NSURL异步下载图像并缓存的接口。一个简单的例子：
+导入的SwiftImage库后，UIImageView提供了多个从NSURL异步下载图像并缓存的接口。 
+一个简单的例子：
 
 ```swift
 let url = NSURL(string: "http://image.com/image.jpg")
@@ -42,10 +43,29 @@ var imageView = UIImageView()
 imageView.imageWithURL(url!)
 ```
 
-所有的接口可以在`SwiftImageViewExtension.swift`文件中找到。
+用Closure做下载完成后的回调函数： 
+
+```swift
+let url = NSURL(string: "http://image.com/image.jpg")
+var imageView = UIImageView()
+imageView.imageWithURL(url!) { (image, data, error, finished) -> Void in
+	// Your callback goes here
+	dispatch_async(dispatch_get_main_queue(), { () -> Void in
+		self.imageView.image = image;
+		UIView.animateWithDuration(2.0, animations: { () -> Void in
+			self.imageView.alpha = 1.0
+       })
+    })
+}
+```  
+在做UI更新的时候记得切换到main queue。因为图像的下载是在global queue中进行的。  
+
+此外还可以传入一个ProgressHandler做伪下载进程中回调函数。所有的接口可以在`SwiftImageViewExtension.swift`文件中找到。
 
 ```swift
 func imageWithURL(url:NSURL)
+func imageWithURL(url:NSURL, placeholderImage: UIImage? = nil, completionHandler:CompletionHandler)
+func imageWithURL(url:NSURL, placeholderImage:UIImage? = nil, progressHander:ProgressHandler, completionHandler:CompletionHandler)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?)
@@ -53,6 +73,12 @@ func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, completionHand
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 ```
+
+取消图像下载任务：
+
+```swift
+imageView.cancelImageDownload()
+```  
 
 ### 通过SwiftImagedDownloadOptions来设置下载和缓存选项
 在下载图像的时候，可以通过创建一个SwiftImagedDownloadOptions来对下载和缓存的各环节进行设置。可以设置的选项包括:  
@@ -127,9 +153,21 @@ SwiftImageDownloadManager.sharedInstance.cancelOperation(operation)
 SwiftImage提供一个`SwiftImageDownloadOperation`的类来作为图像下载缓存任务的类。可以直接创建`SwiftImageDownloadOperation`的实例来创建图像下载和缓存的任务。
 
 ```swift
-init(url:NSURL, options: SwiftImageDownloadOperation, progressHandler:((receivedSize:Int64, expectedSize:Int64)->Void)?, completionHandler:((image:UIImage?, data:NSData?, error:NSError?, finished:Bool)->Void)?)
+let operation = SwiftImageDownloadManager.sharedInstance.retrieveImageFromUrl(url, options: options, completionHandler: { [unowned self](image:UIImage?, data:NSData?, error:NSError?, finished:Bool) -> Void in
+	// your closure goes here
+	dispatch_async(dispatch_get_main_queue(), {()->Void in
+		self.imageView.image = image
+    })
+}
 ```
+
 任务创建后不会立即开始下载。需要调用`start()`来手动开始任务下载。
+
+取消这个下载任务: 
+ 
+```swift
+operation.cancel()
+```
 
 ### 使用SwiftImageCache
 SwiftImage实现了一个SwiftImageCache的单例来异步缓存图像。该实例提供一系列函数来实现在内存或者文件系统的存储和读取。

@@ -19,7 +19,15 @@ class ImageViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         let url = NSURL(string: "http://my10online.com/wp-content/uploads/2011/09/4480604.jpg")
-        imageView.imageWithURL(url!)
+        self.imageView.alpha = 0
+        imageView.imageWithURL(url!) { (image, data, error, finished) -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.imageView.image = image;
+                UIView.animateWithDuration(2.0, animations: { () -> Void in
+                  self.imageView.alpha = 1.0
+                })
+            })
+        }
     }
     
     override func didReceiveMemoryWarning() {

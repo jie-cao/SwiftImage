@@ -120,10 +120,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                     for completionHandler in self.completionHandlers {
                         completionHandler(image:nil, data:nil, error:error, finished:true)
                     }
-                    self.progressHandlers.removeAll()
-                    self.completionHandlers.removeAll()
-                    self.session?.finishTasksAndInvalidate()
-                    SwiftImageDownloadManager.sharedInstance.removeOperation(self)
+                    self.clearOperation()
                 })
             } else {
                 let key = String(self.key)
@@ -134,10 +131,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                             for completionHandler in self.completionHandlers {
                                 completionHandler(image:imageResult, data:self.responseData, error:nil, finished:true)
                             }
-                            self.progressHandlers.removeAll()
-                            self.completionHandlers.removeAll()
-                            self.session?.finishTasksAndInvalidate()
-                            SwiftImageDownloadManager.sharedInstance.removeOperation(self)
+                            self.clearOperation()
                         })
                     })
                     
@@ -155,14 +149,18 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                         for completionHandler in self.completionHandlers {
                             completionHandler(image: nil, data: nil, error: error, finished:true)
                         }
-                        self.progressHandlers.removeAll()
-                        self.completionHandlers.removeAll()
-                        self.session?.finishTasksAndInvalidate()
-                        SwiftImageDownloadManager.sharedInstance.removeOperation(self)
+                        self.clearOperation()
                     })
                 }
             }
         }
     }
     
+    private func clearOperation() {
+        self.progressHandlers.removeAll()
+        self.completionHandlers.removeAll()
+        self.session?.finishTasksAndInvalidate()
+        SwiftImageDownloadManager.sharedInstance.removeOperation(self)
+    }
+
 }

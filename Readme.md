@@ -35,17 +35,43 @@ Usage
 ----------
 
 ### using ImageView Extension
-After import, UIImageView now has a series of functions to download image data from a url. A simple example of the usage:   
+After import, UIImageView now has a series of functions to download image data from a url.  
+A simple example of the usage:   
 
 ```swift
 let url = NSURL(string: "http://image.com/image.jpg")
 var imageView = UIImageView()
 imageView.imageWithURL(url!)
 ```
+Use a closure as callback:  
+
+```swift
+let url = NSURL(string: "http://image.com/image.jpg")
+var imageView = UIImageView()
+imageView.imageWithURL(url!) { (image, data, error, finished) -> Void in
+	// Your callback goes here
+	dispatch_async(dispatch_get_main_queue(), { () -> Void in
+		self.imageView.image = image;
+		UIView.animateWithDuration(2.0, animations: { () -> Void in
+			self.imageView.alpha = 1.0
+       })
+    })
+}
+```  
+Remember to switch to main queue in the closure for UI updates. 
+
+To cancel the download task for the UIImageView instance. You can call the `cancelImageDownload()` method:
+
+```swift
+imageView.cancelImageDownload()
+```  
+
 All the functions can be found at `SwiftImageExtension.swift`. They provides the capability to pass closures add the progress handler and completion handler. The parameter `options: SwiftImageDownloadOption?` is used config the downloading and caching behavior. It will be explained in the next section.
 
 ```swift
 func imageWithURL(url:NSURL)
+func imageWithURL(url:NSURL, placeholderImage: UIImage? = nil, completionHandler:CompletionHandler)
+func imageWithURL(url:NSURL, placeholderImage:UIImage? = nil, progressHander:ProgressHandler, completionHandler:CompletionHandler)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?)
@@ -134,11 +160,25 @@ SwiftImageDownloadManager.sharedInstance.cancelAll()
 ```
 
 ### Usre SwiftImageDownloadOperation to create an image download task
-To create a image download task by creating a SwiftImageDownloadOperation instance:
+To create a image download task by creating a SwiftImageDownloadOperation instance:  
+
 ```swift
-init(url:NSURL, options:SwiftImageDownloadOptions, progressHandler:((receivedSize:Int64, expectedSize:Int64)->Void)?, completionHandler:((image:UIImage?, data:NSData?, error:NSError?, finished:Bool)->Void)?)
+let operation = SwiftImageDownloadManager.sharedInstance.retrieveImageFromUrl(url, options: options, completionHandler: { [unowned self](image:UIImage?, data:NSData?, error:NSError?, finished:Bool) -> Void in
+	// your closure goes here
+	dispatch_async(dispatch_get_main_queue(), {()->Void in
+		self.imageView.image = image
+    })
+}
 ```
+
+
 After the instance is created, it will start the download immediately. You can call the `start()` method to start the download task.
+
+To cancel the image download task for this SwiftImageDownloadOperation instance:  
+
+```swift
+operation.cancel()
+```
 
 ### Use SwiftImageCache
 SwiftImage implemented a SwiftImageCache singletong to cache image data asynchronously. It provides functions to store/fetch image data from memory cache or local file system.  

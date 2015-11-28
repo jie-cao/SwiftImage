@@ -29,8 +29,15 @@ public extension UIImageView{
     }
     
     public func imageWithURL(url:NSURL){
-        let options = SwiftImageDownloadOptions()
-        self.imageWithURL(url, options: options, placeholderImage: nil, progressHandler: nil)
+        self.imageWithURL(url, options: nil, placeholderImage: nil, progressHandler: nil)
+    }
+    
+    public func imageWithURL(url:NSURL, placeholderImage: UIImage? = nil, completionHandler:CompletionHandler){
+        self.imageWithURL(url, options: nil, placeholderImage: placeholderImage, progressHandler:nil, completionHandler: completionHandler)
+    }
+    
+    public func imageWithURL(url:NSURL, placeholderImage:UIImage? = nil, progressHander:ProgressHandler, completionHandler:CompletionHandler){
+        self.imageWithURL(url, options: nil, placeholderImage: placeholderImage, progressHandler: progressHander, completionHandler:completionHandler)
     }
     
     public func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?){
@@ -64,11 +71,12 @@ public extension UIImageView{
         // The operation is added to the UIImageView instance as an associated object. So the object will retain the operation object.
         // The closure in the operation queue will also retain self. This cause the strong reference cycle. Use capture list to resolve the strong reference cycle.
         if let operation = SwiftImageDownloadManager.sharedInstance.retrieveImageFromUrl(url, options: options, completionHandler: { [unowned self](image:UIImage?, data:NSData?, error:NSError?, finished:Bool) -> Void in
-            dispatch_async(dispatch_get_main_queue(), {()->Void in
-                self.image = image
-            })
             if let handler = completionHandler{
                 handler(image: image, data: data, error: error, finished: finished)
+            } else {
+                dispatch_async(dispatch_get_main_queue(), {()->Void in
+                    self.image = image
+                })
             }
             },
             progressHandler: {(receivedSize:Int64, expectedSize:Int64) in
@@ -81,9 +89,9 @@ public extension UIImageView{
     }
     
     
-    public func cancelImageFetch(){
+    public func cancelImageDownload(){
         if let operation = self.getFetchOperation(){
-            SwiftImageDownloadManager.sharedInstance.cancel(operation);
+            operation.cancel()
         }
     }
     
