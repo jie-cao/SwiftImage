@@ -200,32 +200,44 @@ SwiftImage provides a series of functions for processing image data. The feature
 1. Scale Image
 
 ```swift
-    class func resizeImage(image:UIImage, size:CGSize) -> UIImage   
+class func resizeImage(image:UIImage, size:CGSize) -> UIImage   
 ```
 
 2. Get the Image width or height according to the scaled height/width  
 
 ```swift
-    class func scaleImage(image: UIImage, height: CGFloat) -> CGSize
-    class func scaleImage(image: UIImage, width: CGFloat) -> CGSize
-```  
-3. Crop image to a round image
+class func getScaledImageSize(image: UIImage, height: CGFloat) -> CGSize
+class func getScaledImageSzie(image: UIImage, width: CGFloat) -> CGSize
+``` 
+
+3. scaleImage according to width or height (Keep aspect ratio)  
 
 ```swift
-    class func roundImage(image:UIImage, radius:CGFloat) -> UIImage
-```  
-4.  Rotate a image 
+class func scaleImage(image: UIImage, height: CGFloat) -> UIImage
+class func scaleImage(image: UIImage, width: CGFloat) -> UIImage
+```
+
+4. Crop image to a round image
 
 ```swift
-    class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage
+class func roundImage(image:UIImage, radius:CGFloat) -> UIImage
 ```  
-5. Decode image at background thread
+
+5.  Rotate a image 
 
 ```swift
-    class func decodImage(image:UIImage) -> UIImage?
-    class func decodImage(image:UIImage, scale: CGFloat) -> UIImage? 
+class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage
 ```  
+
+6. Decode image at background thread
+
+```swift
+class func decodImage(image:UIImage) -> UIImage?
+class func decodImage(image:UIImage, scale: CGFloat) -> UIImage? 
+```  
+
 These methods are class functions. They can be invoked from `SwiftImageUtils` class directly.
+
 ## Licenses
 
 All source code is licensed under the [MIT License](https://raw.github.com/rs/SDWebImage/master/LICENSE).

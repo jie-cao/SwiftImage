@@ -184,36 +184,45 @@ func loadImageDataFromFile(key: String) -> NSData?
 ### 使用SwiftImage的工具集
 SwiftImage提供了一些图像处理常用的函数。包括：  
 
-1. 图像缩放
+1. 图像缩放  
 
 ```swift
-    class func resizeImage(image:UIImage, size:CGSize) -> UIImage   
+class func resizeImage(image:UIImage, size:CGSize) -> UIImage   
 ```
 
-2. 根据图像缩放到指定宽高后对应的高或者宽（保持宽高比)
+2. 得到图像缩放后的大小（保持宽高比)  
 
 ```swift
-    class func scaleImage(image: UIImage, height: CGFloat) -> CGSize
-    class func scaleImage(image: UIImage, width: CGFloat) -> CGSize
-```  
-3. 剪切图像成圆形图像
+class func getScaledImageSize(image: UIImage, height: CGFloat) -> CGSize
+class func getScaledImageSize(image: UIImage, width: CGFloat) -> CGSize
+```
+
+3. 保持宽高比缩放图像  
+
+```swift
+class func scaleImage(image: UIImage, height: CGFloat) -> UIImage
+class func scaleImage(image: UIImage, width: CGFloat) -> UIImage
+```
+  
+4. 剪切图像成圆形图像
 
 ```swift
     class func roundImage(image:UIImage, radius:CGFloat) -> UIImage
 ```  
-4.  将图像旋转指定角度  
+5. 将图像旋转指定角度  
 
 ```swift
     class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage
 ```  
-5. 图像解压缩
+6. 图像解压缩
 该函数的具体作用在前面已经介绍过。这里指列出函数的形式：
 
 ```swift
     class func decodImage(image:UIImage) -> UIImage?
     class func decodImage(image:UIImage, scale: CGFloat) -> UIImage? 
 ```  
-这些函数都是class function， 可以直接用SwiftImage的class调用。  
+这些函数都是class function， 可以直接用SwiftImage的class调用。    
+
 ## Licenses
 
 All source code is licensed under the [MIT License](https://raw.github.com/rs/SDWebImage/master/LICENSE).

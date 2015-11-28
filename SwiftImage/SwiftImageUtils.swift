@@ -39,6 +39,19 @@ public class SwiftImageUtils: NSObject {
         return decodImage(image, scale: image.scale)
     }
     
+    public class func blendImage(bottomImage:UIImage, topImage:UIImage, topImageOpacity:CGFloat = 1.0) ->UIImage{
+            let width = bottomImage.size.width
+            let height = bottomImage.size.height
+            let newSize = CGSizeMake(width, height)
+            UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+            bottomImage.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
+            topImage.drawInRect(CGRectMake(0, 0, newSize.width, newSize.height), blendMode: .Normal, alpha: topImageOpacity)
+            let newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            return newImage;
+    }
+    
     public class func degreesToRadians(degrees: CGFloat) -> CGFloat {
         return degrees * CGFloat(M_PI) / CGFloat(180)
     }
@@ -73,12 +86,22 @@ public class SwiftImageUtils: NSObject {
         return newImage;
     }
     
-    public class func scaleImage(image: UIImage, height: CGFloat) -> CGSize {
+    public class func getScaledImageSize(image: UIImage, height: CGFloat) -> CGSize {
         return CGSize(width: CGFloat(image.size.width) * (height / CGFloat(image.size.height != 0 ? image.size.height : 1)), height: height)
     }
     
-    public class func scaleImage(image: UIImage, width: CGFloat) -> CGSize {
+    public class func getScaledImageSize(image: UIImage, width: CGFloat) -> CGSize {
         return CGSize(width: width, height: CGFloat(image.size.height) * (width / CGFloat(image.size.width != 0 ? image.size.width : 1)))
+    }
+    
+    public class func scaleImage(image: UIImage, height: CGFloat) -> UIImage {
+        let newSize = SwiftImageUtils.getScaledImageSize(image, height: height)
+        return SwiftImageUtils.resizeImage(image, size: newSize)
+    }
+    
+    public class func scaleImage(image: UIImage, width: CGFloat) -> UIImage {
+        let newSize = SwiftImageUtils.getScaledImageSize(image, width:width)
+        return SwiftImageUtils.resizeImage(image, size: newSize)
     }
     
     public class func getAspectRatio(image: UIImage) -> CGFloat {
