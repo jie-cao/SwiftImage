@@ -197,39 +197,39 @@ The ```cachePolicy:SwiftImageCachePolicy``` paremeter is used to specify the cac
 ### Use SwiftImage utility functions
 SwiftImage provides a series of functions for processing image data. The feature those functions provide are commonly asked. They include:
 
-1. Scale Image
+* Scale Image
 
 ```swift
 class func resizeImage(image:UIImage, size:CGSize) -> UIImage   
 ```
 
-2. Get the Image width or height according to the scaled height/width  
+* Get the Image width or height according to the scaled height/width  
 
 ```swift
 class func getScaledImageSize(image: UIImage, height: CGFloat) -> CGSize
 class func getScaledImageSzie(image: UIImage, width: CGFloat) -> CGSize
 ``` 
 
-3. scaleImage according to width or height (Keep aspect ratio)  
+* scaleImage according to width or height (Keep aspect ratio)  
 
 ```swift
 class func scaleImage(image: UIImage, height: CGFloat) -> UIImage
 class func scaleImage(image: UIImage, width: CGFloat) -> UIImage
 ```
 
-4. Crop image to a round image
+* Crop image to a round image
 
 ```swift
 class func roundImage(image:UIImage, radius:CGFloat) -> UIImage
 ```  
 
-5.  Rotate a image 
+*  Rotate a image 
 
 ```swift
 class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage
 ```  
 
-6. Decode image at background thread
+* Decode image at background thread
 
 ```swift
 class func decodImage(image:UIImage) -> UIImage?
