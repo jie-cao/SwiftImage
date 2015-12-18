@@ -26,10 +26,10 @@ public enum SwiftImageCachePolicy:Int {
 
 public class SwiftImageDownloadOptions: NSObject {
     
-    var priority:SwiftImageDownloadPriority = .DefaultPriority
-    var cachePolicy:SwiftImageCachePolicy = .MemoryAndFileCache
-    var shouldDecode: Bool = true
-    var requestCachePolicy : NSURLRequestCachePolicy = .UseProtocolCachePolicy;
-    var scale: CGFloat = UIScreen.mainScreen().scale
+    public var priority:SwiftImageDownloadPriority = .DefaultPriority
+    public var cachePolicy:SwiftImageCachePolicy = .MemoryAndFileCache
+    public var shouldDecode: Bool = true
+    public var requestCachePolicy : NSURLRequestCachePolicy = .UseProtocolCachePolicy;
+    public var scale: CGFloat = UIScreen.mainScreen().scale
     
 }
