@@ -128,6 +128,17 @@ func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandle
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 ```
 
+### GIF动画图像
+SwiftImage支持GIF动画。使用方法和PNG和JPEG图像没有区别。通过SwiftImage对UIImageView的对象载入GIF图片后，UIImageView对象会自动显示GIF动画。如果你想要对GIF中每一帧图像进行处理，这些图像会在UIImage对象的```images``` field中。  
+
+下载并缓存GIF动画图像：
+
+```swift
+    let url = NSURL(string: "https://gifbook.io/assets/video.gif")
+    imageView.imageWithURL(url!) 
+```
+
+
 ### 使用 SwiftImageDownloadManager
 有时候下载完图像后，不需要直接传递给UIImageView显示并且需要对下载图像的任务进行管理。SwiftImage提供了SwiftImageDownloadManager单例来创建并管理图像异步下载并缓存的任务。   
 创建一个图像异步下载任务:  

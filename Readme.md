@@ -7,6 +7,7 @@ SwiftImage is a framework for downloading and caching image in Swift. It makes i
 - A SwiftImageDOwnloadOperation class to download image asynchronously
 - A SwiftImageCache class to cache image data in memory cache and local file system
 - A series of utilit methods to scale, crop and decode image
+- Support animated GIF image as well
 
 
 Installation
@@ -86,8 +87,9 @@ You can create a SwiftImagedDownloadOptions object and pass in the methods menti
 1.priority  
 The priority of the queue that is responsible for the downloading task. You can specify it as DefaultPriority， LowPriority or HighPriority. 
   
-2.cachePolicy
-The policy for caching. You can specify NoCache，MemoryCache，FileCache or MemoryAndFileCache.    
+2.cachePolicy  
+The policy for caching. You can specify NoCache，MemoryCache，FileCache or MemoryAndFileCache.  
+
 3.shouldDecode  
 The flag to specify whether we should decode the image in the background thread before set it to the UIImageView in the UI thread. UIImageView will decode image on the UI thread if the image is not decoded in the global quue before. This will block the UI thread if there are too many images need to be decode in UI thread. The default option is true.  
 
@@ -131,6 +133,17 @@ func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, completionHand
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 ```
+
+### Support for animated GIF
+SWiftImage support animated GIF, you can use it the same way as the usages of PNG and JPEG images. The UIImageView object holds the animated images will display the GIF with animated images. If you want to manipulate the images in the animated GIF image, it can be access from the  ```images``` field in the UIImage instance for the returned image.
+
+Download and cache animated GIF image:  
+
+```swift
+    let url = NSURL(string: "https://gifbook.io/assets/video.gif")
+    imageView.imageWithURL(url!) 
+```
+
 
 ### Use SwiftImageDownloadManager
 You can use a SwiftImageDownloadManager singleton instance to manage the image download operations. You can use it to create a image download operation. You can cancel a specific image download opation or cancel all the operations.  
