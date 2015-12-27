@@ -121,19 +121,28 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                         completionHandler(image:nil, data:nil, error:error, finished:true)
                     }
                     self.clearOperation()
-                })
+                    })
             } else {
-                let key = String(self.key)
-                if let image = UIImage(data: self.responseData) {
-                    SwiftImageCache.sharedInstance.storeImage(image, key: key, imageData: nil, cachePolicy:self.options.cachePolicy, completionHandler: { [unowned self]()-> Void in
+                let key = self.key
+                let imageType = SwiftImageUtils.getImageTypeFromData(self.responseData)
+                var  imageFromData:UIImage? = nil
+                if imageType == .GIF {
+                    imageFromData = SwiftImageUtils.getAnimatedImageFromData(self.responseData)
+                    
+                } else if imageType == .JPG || imageType == .PNG {
+                    imageFromData = UIImage(data: self.responseData)
+                }
+                
+                if let image = imageFromData {
+                    SwiftImageCache.sharedInstance.storeImage(image, key: key!, imageData: self.responseData, cachePolicy:self.options.cachePolicy, completionHandler: { [unowned self]()-> Void in
                         let imageResult = self.shouldDecode ? SwiftImageUtils.decodImage(image, scale: self.options.scale) :image
                         dispatch_async(self.ioQueue, { [unowned self]() -> Void in
                             for completionHandler in self.completionHandlers {
                                 completionHandler(image:imageResult, data:self.responseData, error:nil, finished:true)
                             }
                             self.clearOperation()
+                            })
                         })
-                    })
                     
                 } else {
                     // If server response is 304 (Not Modified), inform the callback handler with NotModified error.
@@ -150,7 +159,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                             completionHandler(image: nil, data: nil, error: error, finished:true)
                         }
                         self.clearOperation()
-                    })
+                        })
                 }
             }
         }

@@ -143,11 +143,14 @@ public class SwiftImageCache: NSObject {
         if (cachePolicy.rawValue | SwiftImageCachePolicy.FileCache.rawValue) != 0 {
             dispatch_async(ioQueue, {()-> Void in
                 var data:NSData?
-                if (SwiftImageUtils.isPNG(image, imageData: imageData)) {
-                    data = UIImagePNGRepresentation(image);
-                }
-                else {
+                let imageType = SwiftImageUtils.getImageTypeFromData(imageData)
+                switch (imageType){
+                case .JPG:
                     data = UIImageJPEGRepresentation(image, 1.0)
+                case .PNG:
+                    data = UIImagePNGRepresentation(image)
+                default:
+                    data = imageData
                 }
                 
                 if data != nil {
@@ -224,12 +227,18 @@ public class SwiftImageCache: NSObject {
     }
     
     public func retrieveImageForFile(key: String, scale: CGFloat = 1.0) -> UIImage? {
-        if let data = loadImageDataFromFile(key),
-            let image = UIImage(data: data, scale: scale) {
-                return image
-        } else {
-            return nil
+        var  imageFromData:UIImage? = nil
+        if let data = loadImageDataFromFile(key){
+            let imageType = SwiftImageUtils.getImageTypeFromData(data)
+
+            if imageType == .GIF {
+                imageFromData = SwiftImageUtils.getAnimatedImageFromData(data)
+                
+            } else if imageType == .JPG || imageType == .PNG {
+                imageFromData = UIImage(data: data, scale: scale)
+            }
         }
+        return imageFromData
     }
     
     public func loadImageDataFromFile(key: String) -> NSData? {

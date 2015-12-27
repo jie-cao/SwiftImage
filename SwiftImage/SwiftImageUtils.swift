@@ -7,8 +7,14 @@
 //
 
 import UIKit
+import ImageIO
+
+public enum ImageType {
+    case NotSupported, PNG, JPG, GIF
+}
 
 public class SwiftImageUtils: NSObject {
+
     private static let kPNGHeader: [UInt8] = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
     private static let kPNGHeaderData:NSData = NSData(bytes: kPNGHeader, length: 8)
     public class func isPNG(image:UIImage, imageData:NSData? = nil) -> Bool {
@@ -34,6 +40,75 @@ public class SwiftImageUtils: NSObject {
         return imageIsPNG
     }
     
+    public class func getImageTypeFromData(imageData:NSData?) -> ImageType {
+        var c:UInt8 = 0;
+        if let data = imageData {
+            data.getBytes(&c, length: 1)
+            switch(c) {
+            case 0xFF:
+                return .JPG
+            case 0x89:
+                return .PNG
+            case 0x47:
+                return .GIF
+            default:
+                return .NotSupported
+            }
+        }
+        return .NotSupported
+    }
+    
+    public class func getAnimatedImageFromData(imageData:NSData?)->UIImage? {
+                    var animatedImage:UIImage? = nil
+        if let data = imageData {
+            let source = CGImageSourceCreateWithData(data as CFDataRef, nil)
+            let count = CGImageSourceGetCount(source!)
+
+            if (count <= 1){
+                animatedImage = UIImage(data:data)
+            } else {
+                var images = [UIImage]()
+                var duration:NSTimeInterval = 0.0;
+                for var index = 0; index < count; ++index {
+                    let imageRef = CGImageSourceCreateImageAtIndex(source!, index, nil)
+                    duration += SwiftImageUtils.getImageDuration(source!, index: index)
+                    let image = UIImage(CGImage: imageRef!, scale: UIScreen.mainScreen().scale, orientation: UIImageOrientation.Up)
+                    images.append(image)
+                }
+                if (duration == 0) {
+                    duration = 0.1 * Double(count)
+                }
+                
+                animatedImage = UIImage.animatedImageWithImages(images, duration: duration)
+            }
+
+        }
+        return animatedImage
+    }
+    
+    public class func getImageDuration(imageSource:CGImageSourceRef, index:size_t) -> Double
+    {
+        var frameDuration = 0.1
+        let frameProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, index, nil) as? NSDictionary
+        if let frameDict = frameProperties {
+            let gifProperties = frameDict.objectForKey(kCGImagePropertyGIFDictionary as NSString) as? NSDictionary
+            if let gifDict = gifProperties{
+                let gifUnclampedDelayTime = gifDict.objectForKey(kCGImagePropertyGIFUnclampedDelayTime as NSString) as? NSNumber
+                if let delayTime = gifUnclampedDelayTime {
+                    frameDuration = delayTime.doubleValue
+                } else {
+                    if let gifDelayTime = gifDict.objectForKey(kCGImagePropertyGIFDelayTime as NSString) {
+                        frameDuration = gifDelayTime.doubleValue
+                    }
+                }
+            }
+        }
+        
+        if (frameDuration < 0.011) {
+            frameDuration = 0.1
+        }
+        return frameDuration
+    }
     
     public class func decodImage(image:UIImage) -> UIImage? {
         return decodImage(image, scale: image.scale)
@@ -57,6 +132,11 @@ public class SwiftImageUtils: NSObject {
     }
     
     public class func decodImage(image:UIImage, scale: CGFloat) -> UIImage? {
+        if  image.images != nil {
+            // Do not decode animated images
+            return image;
+        }
+        
         UIGraphicsBeginImageContextWithOptions(image.size, true, 0)
         image.drawInRect(CGRectMake(0, 0, image.size.width, image.size.height))
         let decodedImage = UIGraphicsGetImageFromCurrentImageContext()
