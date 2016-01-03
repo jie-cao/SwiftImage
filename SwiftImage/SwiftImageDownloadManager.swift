@@ -60,7 +60,7 @@ public class SwiftImageDownloadManager: NSObject {
         })
     }
     
-    public func retrieveImageFromUrl(url:NSURL, options:SwiftImageDownloadOptions? = nil, completionHandler:((image:UIImage?, data:NSData?, error:NSError?, finished:Bool)->Void)?, progressHandler:((receivedSize:Int64, expectedSize:Int64)->Void)?) -> SwiftImageDownloadOperation? {
+    public func retrieveImageFromUrl(url:NSURL, options:SwiftImageDownloadOptions? = nil, completionHandler:CompletionHandler?, progressHandler:ProgressHandler?, transformHandler:TransformHandler?) -> SwiftImageDownloadOperation? {
         
         if  let operationKey = SwiftImageDownloadManager.defaultKeyConverter(url),
             let imageDownloadOperation = self.fetchOperationForKey(operationKey){
@@ -70,12 +70,15 @@ public class SwiftImageDownloadManager: NSObject {
             if completionHandler != nil {
                 imageDownloadOperation.addCompletionHandler(completionHandler!)
             }
+            if transformHandler != nil {
+                imageDownloadOperation.addTransformHandler(transformHandler!)
+            }
             return imageDownloadOperation;
         } else {
             
             let fetchOptios = options != nil ? options! : SwiftImageDownloadOptions()
             
-            let imageFetchOperation = SwiftImageDownloadOperation(url: url, options: fetchOptios, progressHandler: progressHandler, completionHandler: completionHandler)
+            let imageFetchOperation = SwiftImageDownloadOperation(url: url, options: fetchOptios, progressHandler: progressHandler, completionHandler: completionHandler, transformHandler: transformHandler)
             
             self.addOperationForKey(imageFetchOperation.key!, operation: imageFetchOperation)
             

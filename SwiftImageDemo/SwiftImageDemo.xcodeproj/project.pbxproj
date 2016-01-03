@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0500F7A91C38E4780086F273 /* ImageWithTransformHandlerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0500F7A81C38E4780086F273 /* ImageWithTransformHandlerViewController.swift */; };
 		0560B5991C07A008008BF399 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0560B5981C07A008008BF399 /* AppDelegate.swift */; };
 		0560B59B1C07A008008BF399 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0560B59A1C07A008008BF399 /* ViewController.swift */; };
 		0560B59E1C07A008008BF399 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0560B59C1C07A008008BF399 /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0500F7A81C38E4780086F273 /* ImageWithTransformHandlerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageWithTransformHandlerViewController.swift; sourceTree = "<group>"; };
 		0560B5951C07A008008BF399 /* SwiftImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0560B5981C07A008008BF399 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0560B59A1C07A008008BF399 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				0560B5D51C07A0E3008BF399 /* ImageTableViewCell.swift */,
 				0560B5D61C07A0E3008BF399 /* ImageTableViewController.swift */,
 				0560B5D71C07A0E3008BF399 /* ImageViewController.swift */,
+				0500F7A81C38E4780086F273 /* ImageWithTransformHandlerViewController.swift */,
 				0560B5981C07A008008BF399 /* AppDelegate.swift */,
 				0560B59A1C07A008008BF399 /* ViewController.swift */,
 				0560B59C1C07A008008BF399 /* Main.storyboard */,
@@ -298,6 +301,7 @@
 				0560B5D41C07A030008BF399 /* SwiftImageViewExtention.swift in Sources */,
 				0560B5D31C07A030008BF399 /* SwiftImageUtils.swift in Sources */,
 				0560B5D01C07A030008BF399 /* SwiftImageDownloadManager.swift in Sources */,
+				0500F7A91C38E4780086F273 /* ImageWithTransformHandlerViewController.swift in Sources */,
 				0560B5CF1C07A030008BF399 /* SwiftImageCache.swift in Sources */,
 				0560B59B1C07A008008BF399 /* ViewController.swift in Sources */,
 				0560B5991C07A008008BF399 /* AppDelegate.swift in Sources */,

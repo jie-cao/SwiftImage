@@ -136,12 +136,40 @@ public class SwiftImageUtils: NSObject {
             // Do not decode animated images
             return image;
         }
+            // do not decode animated images
+            
+            let imageRef = image.CGImage;
+            
+            let alpha = CGImageGetAlphaInfo(imageRef);
+            let anyAlpha = (alpha == .First ||
+                alpha == .Last ||
+                alpha == .PremultipliedFirst ||
+                alpha == .PremultipliedLast);
+            
+            if (anyAlpha) { return image }
+            
+            let width = CGImageGetWidth(imageRef);
+            let height = CGImageGetHeight(imageRef);
+            
+            // current
+            let imageColorSpaceModel = CGColorSpaceGetModel(CGImageGetColorSpace(imageRef));
+            var colorspaceRef = CGImageGetColorSpace(imageRef);
+            
+            let unsupportedColorSpace = (imageColorSpaceModel == .Unknown || imageColorSpaceModel == .Monochrome || imageColorSpaceModel == .Indexed);
+            if unsupportedColorSpace{
+                colorspaceRef = CGColorSpaceCreateDeviceRGB();
+            }
+            
+            let context = CGBitmapContextCreate(nil, width, height, CGImageGetBitsPerComponent(imageRef), 0,
+            colorspaceRef,
+            CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue);
+            
+            // Draw the image into the context and retrieve the new image, which will now have an alpha layer
+            CGContextDrawImage(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), imageRef);
+            let imageRefWithAlpha = CGBitmapContextCreateImage(context);
+            let imageWithAlpha = UIImage(CGImage:imageRefWithAlpha!);
         
-        UIGraphicsBeginImageContextWithOptions(image.size, true, 0)
-        image.drawInRect(CGRectMake(0, 0, image.size.width, image.size.height))
-        let decodedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return decodedImage
+            return imageWithAlpha;
     }
     
     public class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage {
@@ -191,11 +219,12 @@ public class SwiftImageUtils: NSObject {
     public class func roundImage(image:UIImage, radius:CGFloat) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius * 2, radius * 2), false, 0)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(context)
-        let clipPath = UIBezierPath(rect: CGRectMake(0, 0, radius * 2, radius * 2))
+        CGContextClearRect(context, CGRectMake(0, 0, radius * 2, radius * 2));
+        //CGContextSaveGState(context)
+        let clipPath = UIBezierPath(ovalInRect: CGRectMake(0, 0, radius * 2, radius * 2))
         clipPath.addClip()
         image.drawInRect(CGRectMake(0, 0, radius * 2, radius * 2))
-        CGContextRestoreGState(context)
+        //CGContextRestoreGState(context)
         let roundImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return  roundImage

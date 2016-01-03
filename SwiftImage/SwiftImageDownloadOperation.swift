@@ -16,6 +16,7 @@ public enum ImageDownloadOperationErrorCode: Int {
 
 public typealias ProgressHandler = ((receivedSize:Int64, expectedSize:Int64)->Void)
 public typealias CompletionHandler = ((image:UIImage?, data:NSData?, error:NSError?, finished:Bool)->Void)
+public typealias TransformHandler = ((image:UIImage) -> UIImage)
 
 public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
     
@@ -29,14 +30,15 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
     var sessionDataTask:NSURLSessionDataTask?
     var progressHandlers = [ProgressHandler]()
     var completionHandlers = [CompletionHandler]()
+    var transformHandlers = [TransformHandler]()
     var shouldDecode:Bool = false
     var url:NSURL?
     var key:String?
     var options:SwiftImageDownloadOptions!
     
     private let ioQueue: dispatch_queue_t = dispatch_queue_create(ioQueueName, DISPATCH_QUEUE_SERIAL)
-    
-    public init(url:NSURL, options:SwiftImageDownloadOptions, progressHandler:((receivedSize:Int64, expectedSize:Int64)->Void)?, completionHandler:((image:UIImage?, data:NSData?, error:NSError?, finished:Bool)->Void)?)
+
+    public init(url:NSURL, options:SwiftImageDownloadOptions, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?, transformHandler:TransformHandler?)
     {
         self.url = url
         self.key = SwiftImageDownloadManager.defaultKeyConverter(url)
@@ -48,6 +50,10 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
             self.completionHandlers.append(completionHandler!)
         }
         
+        if (transformHandler != nil){
+            self.transformHandlers.append(transformHandler!)
+        }
+
         self.options = options
         
         self.shouldDecode = self.options.shouldDecode
@@ -64,6 +70,13 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
             self.completionHandlers.append(completionHandler)
         })
     }
+    
+    public func addTransformHandler(transformHandler:TransformHandler){
+        dispatch_barrier_async(self.ioQueue, { () -> Void in
+            self.transformHandlers.append(transformHandler)
+        })
+    }
+    
     
     public func start() {
         if let url = self.url,
@@ -85,6 +98,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                                 }
                                 self.progressHandlers.removeAll()
                                 self.completionHandlers.removeAll()
+                                self.transformHandlers.removeAll()
                                 SwiftImageDownloadManager.sharedInstance.removeOperation(self)
                             })
                         }
@@ -132,8 +146,16 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
                 } else if imageType == .JPG || imageType == .PNG {
                     imageFromData = UIImage(data: self.responseData)
                 }
-                
-                if let image = imageFromData {
+            
+                if var image = imageFromData {
+                    if (imageType == .JPG || imageType == .PNG) && (self.transformHandlers.count > 0)  {
+                        var transformedImage = image
+                        for transformHandler in self.transformHandlers {
+                            transformedImage = transformHandler(image: image)
+                            image = transformedImage
+                        }
+                    }
+                    
                     SwiftImageCache.sharedInstance.storeImage(image, key: key!, imageData: self.responseData, cachePolicy:self.options.cachePolicy, completionHandler: { [unowned self]()-> Void in
                         let imageResult = self.shouldDecode ? SwiftImageUtils.decodImage(image, scale: self.options.scale) :image
                         dispatch_async(self.ioQueue, { [unowned self]() -> Void in
@@ -168,6 +190,7 @@ public class SwiftImageDownloadOperation: NSObject, NSURLSessionTaskDelegate{
     private func clearOperation() {
         self.progressHandlers.removeAll()
         self.completionHandlers.removeAll()
+        self.transformHandlers.removeAll()
         self.session?.finishTasksAndInvalidate()
         SwiftImageDownloadManager.sharedInstance.removeOperation(self)
     }

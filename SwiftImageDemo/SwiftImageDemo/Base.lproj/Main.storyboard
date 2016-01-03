@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Wdc-Zx-NRD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Wdc-Zx-NRD">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -37,15 +37,28 @@
                                     <segue destination="KHv-mo-ZZu" kind="show" id="y7t-Yr-cju"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sto-vt-LAb">
+                                <rect key="frame" x="30" y="214" width="540" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="DuX-j3-W5l"/>
+                                </constraints>
+                                <state key="normal" title="Example for Image with transform handler"/>
+                                <connections>
+                                    <segue destination="Y4L-zC-TCR" kind="show" id="tnQ-9j-JAw"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="vYe-Ty-MCs" secondAttribute="trailing" constant="30" id="3ZV-5M-gdX"/>
                             <constraint firstAttribute="trailing" secondItem="nqt-zP-lnG" secondAttribute="trailing" constant="30" id="6io-Jm-aTs"/>
+                            <constraint firstAttribute="trailing" secondItem="sto-vt-LAb" secondAttribute="trailing" constant="30" id="A9Q-rI-di3"/>
                             <constraint firstItem="nqt-zP-lnG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="FIx-kI-9Pm"/>
                             <constraint firstItem="nqt-zP-lnG" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="JBE-6x-Ri9"/>
+                            <constraint firstItem="sto-vt-LAb" firstAttribute="top" secondItem="vYe-Ty-MCs" secondAttribute="bottom" constant="30" id="QWq-rG-2Nu"/>
                             <constraint firstItem="vYe-Ty-MCs" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="TkH-0Y-CIF"/>
                             <constraint firstItem="vYe-Ty-MCs" firstAttribute="top" secondItem="nqt-zP-lnG" secondAttribute="bottom" constant="30" id="nAt-9C-fp4"/>
+                            <constraint firstItem="sto-vt-LAb" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="tx7-go-XOY"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lRL-XA-IKl"/>
@@ -159,6 +172,40 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzF-Br-dXb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1742" y="880"/>
+        </scene>
+        <!--Image With Transform Handler View Controller-->
+        <scene sceneID="72D-r3-JJy">
+            <objects>
+                <viewController id="Y4L-zC-TCR" customClass="ImageWithTransformHandlerViewController" customModule="SwiftImageDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Tzy-Jo-Rul"/>
+                        <viewControllerLayoutGuide type="bottom" id="Gjs-2k-y1I"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tjd-3z-3Iv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bKI-qq-EvT">
+                                <rect key="frame" x="150" y="150" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="rzN-KQ-TFB"/>
+                                    <constraint firstAttribute="width" constant="300" id="vAh-Xy-6eE"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="bKI-qq-EvT" firstAttribute="centerY" secondItem="tjd-3z-3Iv" secondAttribute="centerY" id="17W-iN-U7n"/>
+                            <constraint firstItem="bKI-qq-EvT" firstAttribute="centerX" secondItem="tjd-3z-3Iv" secondAttribute="centerX" id="u1k-ke-lQa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="bKI-qq-EvT" id="thn-Z7-uob"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ooJ-6o-Wm3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1742" y="1613"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="TzJ-R9-MGe">

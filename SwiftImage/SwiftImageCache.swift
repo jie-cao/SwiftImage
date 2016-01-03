@@ -178,16 +178,18 @@ public class SwiftImageCache: NSObject {
         if let image = self.retrieveImageFromMemoryCache(key) {
             
             //Found image in memory cache.
-            var result:UIImage? = nil
             if options.shouldDecode {
                 dispatch_async(self.processQueue, { () -> Void in
-                    result = SwiftImageUtils.decodImage(image, scale: options.scale)
+                    let result = SwiftImageUtils.decodImage(image, scale: options.scale)
+                    if let handler = completionHandler {
+                        handler(result, .Memory)
+                    }
                 })
-            }
-            
-            result = result == nil ? image : result
-            if let handler = completionHandler {
-                handler(result, .Memory)
+            } else {
+                
+                if let handler = completionHandler {
+                    handler(image, .Memory)
+                }
             }
         } else {
             
