@@ -220,11 +220,9 @@ public class SwiftImageUtils: NSObject {
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(radius * 2, radius * 2), false, 0)
         let context = UIGraphicsGetCurrentContext()
         CGContextClearRect(context, CGRectMake(0, 0, radius * 2, radius * 2));
-        //CGContextSaveGState(context)
         let clipPath = UIBezierPath(ovalInRect: CGRectMake(0, 0, radius * 2, radius * 2))
         clipPath.addClip()
         image.drawInRect(CGRectMake(0, 0, radius * 2, radius * 2))
-        //CGContextRestoreGState(context)
         let roundImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return  roundImage
