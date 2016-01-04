@@ -73,12 +73,13 @@ All the functions can be found at `SwiftImageExtension.swift`. They provides the
 func imageWithURL(url:NSURL)
 func imageWithURL(url:NSURL, placeholderImage: UIImage? = nil, completionHandler:CompletionHandler)
 func imageWithURL(url:NSURL, placeholderImage:UIImage? = nil, progressHander:ProgressHandler, completionHandler:CompletionHandler)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, completionHandler:CompletionHandler?)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
-func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
+func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?)
+func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil)
+func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler?)
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, completionHandler:CompletionHandler?)
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions? = nil, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler? = nil, transformHandler:TransformHandler? = nil, completionHandler:CompletionHandler? = nil)
 ```
 
 ### Use SwiftImagedDownloadOptions object to set options for image downloading and caching
@@ -132,6 +133,17 @@ func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderIma
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, completionHandler:CompletionHandler?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
+```
+Besides these two common scenarios, SwiftImage also defines a closure ```TransformHander```.   
+
+```swift
+public typealias TransformHandler = ((image:UIImage) -> UIImage)
+```
+
+It is used to tranform the image after SwiftImage downloads its data from internet. The closure will be applied **before** SwiftImage stores the image data into the memory and disk cache. And it will be applied **only** when the image data is retrieved from **internet**. You can use this callback closure to process the image data from internet and don't need to use ```CompletionHanlder``` to process the image data everytime it is retrieved from cache or internet. This can greatly improve the performance if post-processing is needed for each image after it is retrieved.  
+
+```swift
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions? = nil, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler? = nil, transformHandler:TransformHandler? = nil, completionHandler:CompletionHandler? = nil)
 ```
 
 ### Support for animated GIF

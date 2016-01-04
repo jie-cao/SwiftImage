@@ -127,6 +127,18 @@ func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, completionHand
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 func imageWithURL(url:NSURL, options:SwiftImagedDownloadOptions?, placeholderImage:UIImage?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
 ```
+除了以上两种常见callback场景，SwiftImage还定义了一个```TransformHander``` closure.   
+
+```swift
+public typealias TransformHandler = ((image:UIImage) -> UIImage)
+```
+
+它可以用来对从internet获取的图像数据进行处理。这个callback会在图像数据在缓存在内存和文件**之前**被调用。而且只有当数据室从对从**internet**获取的情况下才会被调用。使用这个callback就不必每次调用 ```CompletionHanlder```对图像数据进行后处理。这样会大幅提高App的性能。因为后续图像数据从缓存中被获取时已经进行了相关处理而不必在```CompletionHanlder```里进行处理。
+
+```swift
+func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions? = nil, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler? = nil, transformHandler:TransformHandler? = nil, completionHandler:CompletionHandler? = nil)
+```
+
 
 ### GIF动画图像
 SwiftImage支持GIF动画。使用方法和PNG和JPEG图像没有区别。通过SwiftImage对UIImageView的对象载入GIF图片后，UIImageView对象会自动显示GIF动画。如果你想要对GIF中每一帧图像进行处理，这些图像会在UIImage对象的```images``` field中。  

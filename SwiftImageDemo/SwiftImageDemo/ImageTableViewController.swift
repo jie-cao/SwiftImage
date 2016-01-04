@@ -57,7 +57,7 @@ class ImageTableViewController: UIViewController, UITableViewDataSource, UITable
         cell.contentLabel?.text = data["text"]
         let placeholderImage = UIImage(named: "placeholder.jpg")
         if let imageUrl = NSURL(string: data["url"]!){
-            cell.photoView?.imageWithURL(imageUrl, options: nil, placeholderImage: placeholderImage)
+            cell.photoView?.imageWithURL(imageUrl, placeholderImage: placeholderImage)
             cell.photoView?.contentMode = .ScaleAspectFit
         }
         return cell

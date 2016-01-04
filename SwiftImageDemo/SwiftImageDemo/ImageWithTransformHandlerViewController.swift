@@ -26,7 +26,7 @@ class ImageWithTransformHandlerViewController: UIViewController {
         let url = NSURL(string: "https://pbs.twimg.com/profile_images/567285191169687553/7kg_TF4l.jpeg")
         self.imageView.alpha = 0
 
-        imageView.imageWithURL(url!, tranformsHandler: { (image) -> UIImage in
+        imageView.imageWithURL(url!, transformHandler: { (image) -> UIImage in
                 SwiftImageUtils.roundImage(image, radius: 300.0)
             }) { (image, data, error, finished) -> Void in
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
