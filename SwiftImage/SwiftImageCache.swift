@@ -33,8 +33,8 @@ public class SwiftImageCache: NSObject {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         filesFolder = NSURL(fileURLWithPath:paths.first!).URLByAppendingPathComponent(SwiftImageCache.cacheName)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("clearMemoryCache"), name: UIApplicationDidReceiveMemoryWarningNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("cleanExpiredDiskCache"), name: UIApplicationWillTerminateNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("cleanExpiredDiskCache"), name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("backgroundCleanExpiredDiskCache"), name: UIApplicationWillTerminateNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("backgroundCleanExpiredDiskCache"), name: UIApplicationDidEnterBackgroundNotification, object: nil)
     }
     
     deinit{
@@ -68,7 +68,7 @@ public class SwiftImageCache: NSObject {
             backgroundTask = UIBackgroundTaskInvalid
         }
         
-        cleanExpiredDiskCacheWithCompletionHander { () -> () in
+        self.cleanExpiredDiskCacheWithCompletionHander { () -> () in
             UIApplication.sharedApplication().endBackgroundTask(backgroundTask)
             backgroundTask = UIBackgroundTaskInvalid
         }

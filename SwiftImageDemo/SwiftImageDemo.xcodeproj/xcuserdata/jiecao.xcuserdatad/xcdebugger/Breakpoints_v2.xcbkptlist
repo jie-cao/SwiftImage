@@ -83,5 +83,69 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../SwiftImage/SwiftImageCache.swift"
+            timestampString = "476178068.491104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "backgroundCleanExpiredDiskCache()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftImageDemo.SwiftImageCache.backgroundCleanExpiredDiskCache (SwiftImageDemo.SwiftImageCache)() -&gt; ()"
+                  moduleName = "SwiftImageDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jiecao/Documents/code/cocoapods/SwiftImage/SwiftImage/SwiftImage/SwiftImageCache.swift"
+                  timestampString = "476178103.992548"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "600">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftImageDemo.SwiftImageCache.(backgroundCleanExpiredDiskCache (SwiftImageDemo.SwiftImageCache) -&gt; () -&gt; ()).(closure #2)"
+                  moduleName = "SwiftImageDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jiecao/Documents/code/cocoapods/SwiftImage/SwiftImage/SwiftImage/SwiftImageCache.swift"
+                  timestampString = "476178103.99271"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../SwiftImage/SwiftImageCache.swift"
+            timestampString = "476178092.902107"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "cleanExpiredDiskCacheWithCompletionHander(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
