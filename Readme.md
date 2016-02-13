@@ -14,7 +14,7 @@ Installation
 ------------
 
 ### CocoaPods (iOS 8+)
-You can use Cocoapods to install SwiftImage adding it to your Podfile:
+You can use CocoaPods to install SwiftImage adding it to your Podfile:
 
 
 #### Podfile
