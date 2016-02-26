@@ -160,16 +160,20 @@ public class SwiftImageUtils: NSObject {
                 colorspaceRef = CGColorSpaceCreateDeviceRGB();
             }
             
-            let context = CGBitmapContextCreate(nil, width, height, CGImageGetBitsPerComponent(imageRef), 0,
+        if let context = CGBitmapContextCreate(nil, width, height, CGImageGetBitsPerComponent(imageRef), 0,
             colorspaceRef,
-            CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue);
-            
-            // Draw the image into the context and retrieve the new image, which will now have an alpha layer
-            CGContextDrawImage(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), imageRef);
-            let imageRefWithAlpha = CGBitmapContextCreateImage(context);
-            let imageWithAlpha = UIImage(CGImage:imageRefWithAlpha!);
-        
-            return imageWithAlpha;
+            CGBitmapInfo.ByteOrderDefault.rawValue | CGImageAlphaInfo.PremultipliedFirst.rawValue) {
+                
+                // Draw the image into the context and retrieve the new image, which will now have an alpha layer
+                CGContextDrawImage(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), imageRef);
+                let imageRefWithAlpha = CGBitmapContextCreateImage(context);
+                let imageWithAlpha = UIImage(CGImage:imageRefWithAlpha!);
+                
+                
+                return imageWithAlpha;
+        } else {
+            return image
+        }
     }
     
     public class func rotatedByDegrees(img: UIImage, degrees: CGFloat) -> UIImage {

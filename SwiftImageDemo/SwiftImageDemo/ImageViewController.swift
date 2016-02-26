@@ -18,7 +18,7 @@ class ImageViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        let url = NSURL(string: "https://gifbook.io/assets/video.gif")
+        let url = NSURL(string: "http://www.catgifs.org/wp-content/uploads/2013/09/046_boxing_cat_gifs.gif")
         self.imageView.alpha = 0
         imageView.imageWithURL(url!) { (image, data, error, finished) -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in

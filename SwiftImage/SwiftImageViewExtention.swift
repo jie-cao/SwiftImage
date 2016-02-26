@@ -28,45 +28,6 @@ public extension UIImageView{
         return objc_removeAssociatedObjects(self)
     }
     
-    public func imageWithURL(url:NSURL){
-        self.imageWithURL(url, options:nil, placeholderImage:nil, progressHandler:nil, transformHandler:nil, completionHandler:nil)
-    }
-    
-    public func imageWithURL(url:NSURL, placeholderImage: UIImage? = nil, completionHandler:CompletionHandler){
-        self.imageWithURL(url, options:nil, placeholderImage:nil, progressHandler:nil, transformHandler:nil, completionHandler:completionHandler)
-    }
-    
-    public func imageWithURL(url:NSURL, placeholderImage:UIImage? = nil, progressHander:ProgressHandler, completionHandler:CompletionHandler){
-        self.imageWithURL(url, options: nil, placeholderImage: placeholderImage, progressHandler: progressHander, transformHandler: nil, completionHandler:completionHandler)
-    }
-    
-    public func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?){
-        self.imageWithURL(url, options: options, placeholderImage: nil, progressHandler: nil, transformHandler: nil, completionHandler: nil)
-    }
-    
-    public func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil){
-        self.imageWithURL(url, options: options, placeholderImage: placeholderImage, progressHandler: nil, transformHandler: nil, completionHandler: nil)
-    }
-    
-    public func imageWithURL(url:NSURL, options: SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler?){
-        self.imageWithURL(url, options: options, placeholderImage: placeholderImage, progressHandler: progressHandler, transformHandler: nil, completionHandler: nil)
-    }
-    
-    public func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, placeholderImage:UIImage? = nil, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
-    {
-        self.imageWithURL(url, options: options, placeholderImage: placeholderImage, progressHandler: progressHandler, transformHandler: nil, completionHandler: completionHandler)
-    }
-    
-    public func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, completionHandler:CompletionHandler?)
-    {
-        self.imageWithURL(url, options: options, placeholderImage: nil, progressHandler: nil, transformHandler: nil, completionHandler: completionHandler)
-    }
-    
-    public func imageWithURL(url:NSURL, options:SwiftImageDownloadOptions?, progressHandler:ProgressHandler?, completionHandler:CompletionHandler?)
-    {
-        self.imageWithURL(url, options: options, placeholderImage: nil, progressHandler: progressHandler, transformHandler: nil, completionHandler: completionHandler)
-    }
-    
     public func imageWithURL(url:NSURL,
         options:SwiftImageDownloadOptions? = nil,
         placeholderImage:UIImage? = nil,
